@@ -42,7 +42,8 @@ namespace Alura.WebAPI.Api
                 options.Filters.Add(typeof(ErrorResponseFilter));
             }).AddXmlSerializerFormatters();
 
-            services.Configure<ApiBehaviorOptions>(options => {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
                 options.SuppressModelStateInvalidFilter = true;
             });
 
@@ -66,6 +67,10 @@ namespace Alura.WebAPI.Api
             });
 
             services.AddApiVersioning();
+
+            services.AddSwaggerGen(
+                c => c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Description = "Documentação da API", Version = "1.0" }
+            ));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -78,6 +83,15 @@ namespace Alura.WebAPI.Api
             app.UseAuthentication();
 
             app.UseMvc();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                c.RoutePrefix = "";
+            });
+
         }
     }
 }
